@@ -2,9 +2,12 @@
 
 
 #include "CurrentWeapon.h"
+#include "GameFramework/PlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "WeaponUtils.h"
+#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Camera/PlayerCameraManager.h"
 
 // Sets default values for this component's properties
 ACurrentWeapon::ACurrentWeapon()
@@ -21,7 +24,15 @@ void ACurrentWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		APlayerCameraManager* CameraManager = PlayerController->PlayerCameraManager;
+		if (CameraManager)
+		{
+			DefaultFOV = CameraManager->GetFOVAngle();
+		}
+	}
 	
 }
 
@@ -45,6 +56,7 @@ void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponA
 	// UE_LOG(LogTemp, Log, TEXT("BeforeWeaponOwnerActor: %s"), * (Weapon->GetOwner() ? Weapon->GetOwner()->GetName() : TEXT("None")));
 	// 复制属性
 	WeaponUtils::CopyWeaponProperties(NewWeapon, Weapon);
+	Weapon->Ammo = Weapon->MaxAmmo;  // 设置弹夹中的子弹数
 	// 更新玩家当前持有的武器
 	// UE_LOG(LogTemp, Log, TEXT("WeaponOwnerActor: %s"), * (Weapon->GetOwner() ? Weapon->GetOwner()->GetName() : TEXT("None")));
 	Character->CurrentWeapon = Weapon;  // 存储 UCurrentWeapon 组件
@@ -53,6 +65,11 @@ void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponA
 
 void ACurrentWeapon::Fire()
 {
+	// 弹夹打空的情况下不允许再开火
+	if (Ammo <= 0)
+	{
+		return;
+	}
 	// 检查子弹类是否设置
 	if (!BulletClass)
 	{
@@ -113,5 +130,103 @@ void ACurrentWeapon::Fire()
 	if (FireSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, CameraLocation);
+	}
+
+	// 扣除当前子弹
+	Ammo-=1;
+}
+
+void ACurrentWeapon::Reload()
+{
+	int ToReloadAmmo = MaxAmmo - Ammo;
+	AFPS_Fans_OSCharacter* Player =  Cast<AFPS_Fans_OSCharacter>(GetOwner());
+	if (Player)
+	{
+		Player->TotalAmmo -= ToReloadAmmo;
+		if (Player->TotalAmmo <= 0)
+		{
+			ToReloadAmmo += Player->TotalAmmo;
+			Player->TotalAmmo = 0;
+		}
+	}
+	Ammo += ToReloadAmmo;
+}
+
+void ACurrentWeapon::StartAiming()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	// 获取玩家角色
+	AFPS_Fans_OSCharacter* PlayerCharacter = Cast<AFPS_Fans_OSCharacter>(PlayerController->GetPawn());
+	if (!PlayerCharacter) return;
+
+	// 创建并显示瞄准UI
+	if (ZoomedCrosshairWidgetClass)
+	{
+		CurrentZoomedCrosshair = CreateWidget<UUserWidget>(PlayerController, ZoomedCrosshairWidgetClass);
+		if (CurrentZoomedCrosshair)
+		{
+			CurrentZoomedCrosshair->AddToViewport();
+		}
+	}
+	
+	// 根据放大倍率计算目标 FOV
+	ZoomFactor = DefaultFOV / ZoomMultiplier;
+	// 使用定时器平滑调整FOV
+	GetWorld()->GetTimerManager().SetTimer(ZoomTimerHandle, this, &ACurrentWeapon::ZoomIn, 0.01f, true);
+
+}
+
+void ACurrentWeapon::ZoomIn()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	float CurrentFOV = PlayerController->PlayerCameraManager->GetFOVAngle();
+	float NewFOV = FMath::FInterpTo(CurrentFOV, ZoomFactor, GetWorld()->GetDeltaSeconds(), ZoomSpeed);
+	PlayerController->PlayerCameraManager->SetFOV(NewFOV);
+		
+	if (FMath::Abs(NewFOV - ZoomFactor) < 0.1f)
+	{
+		PlayerController->PlayerCameraManager->SetFOV(ZoomFactor);
+		GetWorld()->GetTimerManager().ClearTimer(ZoomTimerHandle);
+	}
+}
+
+void ACurrentWeapon::CancelAiming()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	// 获取玩家角色
+	AFPS_Fans_OSCharacter* PlayerCharacter = Cast<AFPS_Fans_OSCharacter>(PlayerController->GetPawn());
+	if (!PlayerCharacter) return;
+
+	// 移除瞄准UI
+	if (CurrentZoomedCrosshair)
+	{
+		CurrentZoomedCrosshair->RemoveFromParent();
+		CurrentZoomedCrosshair = nullptr;
+	}
+
+	// 使用定时器平滑恢复FOV
+	GetWorld()->GetTimerManager().SetTimer(ZoomTimerHandle, this, &ACurrentWeapon::ZoomOut, 0.01f, true);
+
+}
+
+void ACurrentWeapon::ZoomOut()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	float CurrentFOV = PlayerController->PlayerCameraManager->GetFOVAngle();
+	float NewFOV = FMath::FInterpTo(CurrentFOV, DefaultFOV, GetWorld()->GetDeltaSeconds(), ZoomSpeed);
+	PlayerController->PlayerCameraManager->SetFOV(NewFOV);
+
+	if (FMath::Abs(NewFOV - DefaultFOV) < 0.1f)
+	{
+		PlayerController->PlayerCameraManager->SetFOV(DefaultFOV);
+		GetWorld()->GetTimerManager().ClearTimer(ZoomTimerHandle);
 	}
 }

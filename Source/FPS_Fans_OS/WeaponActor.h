@@ -46,4 +46,18 @@ public:
 	// 枪口Socket名称
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FName MuzzleSocketName = TEXT("MuzzleSocket");
+	// 开镜的视野角度(通过计算设置,不需要手动设置）
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float ZoomFactor;
+	// 放大倍率，例如2.0倍
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aiming")
+	float ZoomMultiplier = 2.0f;
+	// 开镜的倍镜材质UI
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class UUserWidget> ZoomedCrosshairWidgetClass;
+
+protected:
+	// Current zoomed crosshair widget instance
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UUserWidget* CurrentZoomedCrosshair = nullptr;
 };

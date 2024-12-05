@@ -99,6 +99,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="CurrentWeapon")
 	ACurrentWeapon* CurrentWeapon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AmmoInfo")
+	int TotalAmmo = 180; // 人物目前持有的剩余子弹量
 private:
 };
 
