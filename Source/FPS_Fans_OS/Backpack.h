@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "Components/ActorComponent.h"
 #include "Backpack.generated.h"
 
@@ -23,10 +24,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	UFUNCTION(BlueprintCallable, Category = "UI操作")
+	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
 	void OpenBackpackUI();  // 打开背包UI
-	UFUNCTION(BlueprintCallable, Category = "UI操作")
+	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
 	void CloseBackpackUI();  // 关闭~
+	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
+	void AddItemToBackpack(AItem* Item);  // 将一件物品添加进背包
+	
 
 	// 背包UI的类
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

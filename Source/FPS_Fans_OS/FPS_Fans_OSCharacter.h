@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Backpack.h"
+#include "WeaponActor.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "FPS_Fans_OSCharacter.generated.h"
@@ -77,12 +78,18 @@ public:
 	int Health = 100;  // 生命值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
 	float Stamina = 100; // 体力值
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerActionStatus")
 	bool IsSpring = false;  // 现在是否在疾跑
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerActionStatus")
+	bool IsChangingWeapon = false;  // 现在是否正在更换武器
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicStatus")
 	bool CanMove = true; // 现在是否可以移动
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicStatus")
 	bool CanSpring = true; // 现在是否可以疾跑
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicStatus")
+	bool CanFire = false; // 现在是否可以开火
 
 	// 背包组件
 	// 声明 TSubclassOf<UBackpack> 变量，允许在蓝图中选择绑定的 Backpack 类（这个是背包组件的主体对象）
@@ -96,8 +103,14 @@ public:
 	UBackpack* Backpack;
 
 	// 手持物品组件
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="CurrentWeapon")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CurrentWeapon")
 	ACurrentWeapon* CurrentWeapon;
+
+	// 快捷切换装备槽
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapons")
+	TArray<AWeaponActor*> Weapons;  // 武器槽中的所有武器
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapons")
+	int CurrentWeaponID=-1;  // 当前武器的ID，指是几号位的武器
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AmmoInfo")
 	int TotalAmmo = 180; // 人物目前持有的剩余子弹量

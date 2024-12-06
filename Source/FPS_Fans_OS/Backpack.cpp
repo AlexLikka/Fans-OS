@@ -66,3 +66,7 @@ void UBackpack::CloseBackpackUI()
 	}
 }
 
+void UBackpack::AddItemToBackpack(AItem* Item)
+{
+}
+

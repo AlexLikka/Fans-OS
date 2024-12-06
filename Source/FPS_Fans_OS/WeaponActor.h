@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "Bullet.h"
 #include "GameFramework/Actor.h"
+#include "Item.h"
 #include "WeaponActor.generated.h"
 
 UCLASS()
-class FPS_FANS_OS_API AWeaponActor : public AActor
+class FPS_FANS_OS_API AWeaponActor : public AItem
 {
 	GENERATED_BODY()
 	

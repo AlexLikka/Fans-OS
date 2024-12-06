@@ -36,6 +36,26 @@ void ACurrentWeapon::BeginPlay()
 	
 }
 
+void ACurrentWeapon::ChangeCurrentWeapon(AFPS_Fans_OSCharacter* Character, const int WeaponID)
+{
+	const int CurrentWeaponsNum = Character->Weapons.Num();
+	if (CurrentWeaponsNum <= 0)  // 如果玩家的武器槽中没有任何武器，不执行该函数
+	{
+		return;
+	}
+	if (WeaponID == Character->CurrentWeaponID)  // 如果要切换的武器与当前正在装备的武器一致，跳过执行
+	{
+		return;
+	}
+	if (WeaponID >= CurrentWeaponsNum)  // 避免数组非法访问
+	{
+		return;
+	}
+
+	SetCurrentWeapon(Character, Character->Weapons[WeaponID], Character->GetWorld());
+	Character->CurrentWeaponID = WeaponID;
+}
+
 
 void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponActor* NewWeapon, UWorld* World)
 {
@@ -56,7 +76,7 @@ void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponA
 	// UE_LOG(LogTemp, Log, TEXT("BeforeWeaponOwnerActor: %s"), * (Weapon->GetOwner() ? Weapon->GetOwner()->GetName() : TEXT("None")));
 	// 复制属性
 	WeaponUtils::CopyWeaponProperties(NewWeapon, Weapon);
-	Weapon->Ammo = Weapon->MaxAmmo;  // 设置弹夹中的子弹数
+	// Weapon->Ammo = Weapon->MaxAmmo;  // 设置弹夹中的子弹数
 	// 更新玩家当前持有的武器
 	// UE_LOG(LogTemp, Log, TEXT("WeaponOwnerActor: %s"), * (Weapon->GetOwner() ? Weapon->GetOwner()->GetName() : TEXT("None")));
 	Character->CurrentWeapon = Weapon;  // 存储 UCurrentWeapon 组件
@@ -150,6 +170,7 @@ void ACurrentWeapon::Reload()
 		}
 	}
 	Ammo += ToReloadAmmo;
+	
 }
 
 void ACurrentWeapon::StartAiming()

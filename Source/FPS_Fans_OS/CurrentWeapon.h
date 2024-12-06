@@ -19,7 +19,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	UFUNCTION(BlueprintCallable, Category = "WeaponAction")
+	static void ChangeCurrentWeapon(AFPS_Fans_OSCharacter* Character, const int WeaponID);
 	static void SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponActor* NewWeapon, UWorld* World);
 	// 射击方法，暴露给蓝图调用
 	UFUNCTION(BlueprintCallable, Category = "WeaponAction")
@@ -39,7 +41,7 @@ public:
 	void ZoomOut();
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CurrentWeaponInfo")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CurrentWeaponInfo")
 	int Ammo; // 当前弹夹的剩余弹药量
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CurrentWeaponInfo")

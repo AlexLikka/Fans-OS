@@ -92,11 +92,15 @@ void ADropItem::Pickup()
 	AFPS_Fans_OSCharacter* Player = Cast<AFPS_Fans_OSCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Player)
 	{
+		Player->Backpack->AddItemToBackpack(this);  // 将掉落物拾取到背包中（该方法暂未实现）
+		
+		// 以下是在背包系统未完成的情况下使用的临时代码
 		// 生成武器实例，从蓝图类生成
 		AWeaponActor* NewWeaponActor = GetWorld()->SpawnActor<AWeaponActor>(ItemBlueprintClass, GetActorLocation(), GetActorRotation());
 		if (NewWeaponActor)
 		{
-			ACurrentWeapon::SetCurrentWeapon(Player, NewWeaponActor, GetWorld());
+			Player->Weapons.Add(NewWeaponActor);
+			ACurrentWeapon::ChangeCurrentWeapon(Player, Player->CurrentWeaponID+1);
 		}
 	}
 	// 销毁掉落物（模型）

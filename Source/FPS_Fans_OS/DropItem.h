@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "GameFramework/Actor.h"
 #include "DropItem.generated.h"
 
 class UCapsuleComponent;
 
 UCLASS()
-class FPS_FANS_OS_API ADropItem : public AActor
+class FPS_FANS_OS_API ADropItem : public AItem
 {
 	GENERATED_BODY()
 	
