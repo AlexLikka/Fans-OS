@@ -1,6 +1,7 @@
 #include "DropItem.h"
 #include "FPS_Fans_OSCharacter.h"
 #include "CurrentWeapon.h"
+#include "WeaponUtils.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 
@@ -100,7 +101,12 @@ void ADropItem::Pickup()
 		if (NewWeaponActor)
 		{
 			Player->Weapons.Add(NewWeaponActor);
-			ACurrentWeapon::ChangeCurrentWeapon(Player, Player->CurrentWeaponID+1);
+			NewWeaponActor->SetActorHiddenInGame(true);
+			NewWeaponActor->SetActorEnableCollision(false);
+			if (!Player->CurrentWeapon)
+			{
+				ACurrentWeapon::ChangeCurrentWeapon(Player, Player->CurrentWeaponID+1);
+			}
 		}
 	}
 	// 销毁掉落物（模型）

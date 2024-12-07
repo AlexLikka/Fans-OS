@@ -15,6 +15,10 @@ public:
 	// Sets default values for this component's properties
 	ACurrentWeapon();
 
+	// 独立的 Mesh 组件
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
+	USkeletalMeshComponent* CurrentWeaponMesh;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -22,7 +26,9 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category = "WeaponAction")
 	static void ChangeCurrentWeapon(AFPS_Fans_OSCharacter* Character, const int WeaponID);
+	
 	static void SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponActor* NewWeapon, UWorld* World);
+	static void RemoveCurrentWeapon(AFPS_Fans_OSCharacter* Character, int WeaponID);
 	// 射击方法，暴露给蓝图调用
 	UFUNCTION(BlueprintCallable, Category = "WeaponAction")
 	void Fire();  // 开火动作
@@ -41,8 +47,6 @@ public:
 	void ZoomOut();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CurrentWeaponInfo")
-	int Ammo; // 当前弹夹的剩余弹药量
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CurrentWeaponInfo")
 	bool IsReloading = false; // 当前是否正在执行换弹动作

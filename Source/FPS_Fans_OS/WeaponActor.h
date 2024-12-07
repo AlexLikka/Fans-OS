@@ -26,16 +26,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere)
-	class USphereComponent* CollisionComponent;
+	USphereComponent* CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	class USkeletalMeshComponent* MeshComponent;
+	USkeletalMeshComponent* MeshComponent;
 
 	// 以下是对武器的基础属性的定义
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FName Name;  // 这个武器的名字
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	int MaxAmmo;  // 这把武器一个弹夹能容纳的最大子弹数
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CurrentWeaponInfo")
+	int Ammo; // 当前弹夹的剩余弹药量
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	int Damage;  // 武器的伤害值
 	// 子弹类，用于生成子弹

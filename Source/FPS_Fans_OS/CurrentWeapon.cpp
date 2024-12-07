@@ -15,7 +15,18 @@ ACurrentWeapon::ACurrentWeapon()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
+	// 初始化独立的 Mesh 组件
+	CurrentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
+	CurrentWeaponMesh->SetupAttachment(RootComponent);
+	CurrentWeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 隐藏继承自 AWeaponActor 的 MeshComponent
+	if (MeshComponent)
+	{
+		MeshComponent->SetVisibility(false);
+		MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 
@@ -52,6 +63,7 @@ void ACurrentWeapon::ChangeCurrentWeapon(AFPS_Fans_OSCharacter* Character, const
 		return;
 	}
 
+	RemoveCurrentWeapon(Character, WeaponID);
 	SetCurrentWeapon(Character, Character->Weapons[WeaponID], Character->GetWorld());
 	Character->CurrentWeaponID = WeaponID;
 }
@@ -64,7 +76,9 @@ void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponA
 	
 
 	// 将武器附加到玩家的骨架上
+	NewWeapon->SetActorHiddenInGame(false);
 	NewWeapon->AttachToComponent(Character->GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("WeaponSocket"));
+	
 	// 设置 Spawn 参数，指定 Owner 为 Character
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Character;
@@ -80,6 +94,35 @@ void ACurrentWeapon::SetCurrentWeapon(AFPS_Fans_OSCharacter* Character, AWeaponA
 	// 更新玩家当前持有的武器
 	// UE_LOG(LogTemp, Log, TEXT("WeaponOwnerActor: %s"), * (Weapon->GetOwner() ? Weapon->GetOwner()->GetName() : TEXT("None")));
 	Character->CurrentWeapon = Weapon;  // 存储 UCurrentWeapon 组件
+	
+}
+
+void ACurrentWeapon::RemoveCurrentWeapon(AFPS_Fans_OSCharacter* Character, int WeaponID)
+{
+	if (!Character)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RemoveCurrentWeapon called with null Character"));
+		return;
+	}
+
+	ACurrentWeapon* CurrentWeapon = Character->CurrentWeapon;
+	if (!CurrentWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character has no current weapon to remove"));
+		return;
+	}
+	AWeaponActor* WeaponActor = Character->Weapons[Character->CurrentWeaponID];
+	WeaponActor->SetActorHiddenInGame(true);
+	WeaponActor->Ammo = CurrentWeapon->Ammo;
+	
+	// 分离武器
+	CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	UE_LOG(LogTemp, Log, TEXT("Detached weapon: %s from character: %s"), 
+		*CurrentWeapon->GetName(), *Character->GetName());
+	CurrentWeapon->Destroy();
+	
+	// 更新角色的当前武器引用
+	Character->CurrentWeapon = nullptr;
 	
 }
 

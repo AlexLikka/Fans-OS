@@ -20,7 +20,7 @@ public:
 
 	// 设置蓝图类作为掉落物的外表
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DropItem")
-	TSubclassOf<AActor> ItemBlueprintClass;
+	TSubclassOf<AItem> ItemBlueprintClass;
 
 	// 生成掉落物的方法，接受x, y坐标，并根据地面自动调整z坐标
 	// UFUNCTION(BlueprintCallable, Category = "DropItem")
