@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "InteractiveActor.h"
@@ -14,29 +14,29 @@ AInteractiveActor::AInteractiveActor()
 	MyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("MyCustomBox"));
 	MyAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("MyCustomAudio"));
 
-	//¸¸×Ó¼¶¹ØÏµÉèÖÃ
+	//ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½
 	RootComponent = MyScene;
 	MyMesh->SetupAttachment(MyScene);
 	MyParticle->SetupAttachment(MyScene);
 	MyBox->SetupAttachment(MyScene);
 	MyAudio->SetupAttachment(MyBox);
 
-	//¼ÓÔØ×ÊÔ´·ÖÎª¶¯Ì¬ºÍ¾²Ì¬
-	//¾²Ì¬¼ÓÔØ·ÖÎª¾²Ì¬¼ÓÔØ×ÊÔ´ºÍ¾²Ì¬¼ÓÔØ×ÊÔ´Àà(±ØÐëÐ´ÔÚ¹¹Ôìº¯ÊýÄÚ)
-	//¾²Ì¬¼ÓÔØ×ÊÔ´£º
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Îªï¿½ï¿½Ì¬ï¿½Í¾ï¿½Ì¬
+	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½Ø·ï¿½Îªï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Í¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Ú¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½)
+	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>TempStaticMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
-	MyMesh->SetStaticMesh(TempStaticMesh.Object); //ÉèÖÃÄ£ÐÍ
+	MyMesh->SetStaticMesh(TempStaticMesh.Object); //ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>TempParticleSystem(TEXT("/Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
-	MyParticle->SetTemplate(TempParticleSystem.Object); //ÉèÖÃÁ£×ÓÌØÐ§
+	MyParticle->SetTemplate(TempParticleSystem.Object); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
 	static ConstructorHelpers::FObjectFinder<USoundWave>TempSoundWave(TEXT("/Script/Engine.SoundWave'/Game/StarterContent/Audio/Collapse01.Collapse01'"));
 	MyAudio->SetSound(TempSoundWave.Object);
 
-	//¾²Ì¬¼ÓÔØ×ÊÔ´Àà£º
+	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½à£º
 	static ConstructorHelpers::FClassFinder<AActor>TempMyActor(TEXT("/Script/Engine.Blueprint'/Game/StarterContent/Blueprints/Blueprint_CeilingLight.Blueprint_CeilingLight_C'"));
 	InteractiveActor = TempMyActor.Class;
 
 
-	//Åö×²ÉèÖÃ
+	//ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½
 	MyBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	MyBox->SetCollisionObjectType(ECC_WorldDynamic);
 	MyBox->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -55,26 +55,26 @@ void AInteractiveActor::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("MyActorCreated!"));
 	}
 
-	////¶¯Ì¬¼ÓÔØ×ÊÔ´£ºLoad
+	////ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Load
 	//UStaticMesh* MyTempStaticMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
 	//if (MyTempStaticMesh)
 	//{
 	//	MyMesh->SetStaticMesh(MyTempStaticMesh);
 	//}
-	////¶¯Ì¬¼ÓÔØÀà
+	////ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//UClass* MyTempClass = LoadClass<AActor>(this, TEXT("/Script/Engine.Blueprint'/Game/StarterContent/Blueprints/Blueprint_Effect_Steam.Blueprint_Effect_Steam_C'"));
 	//if (MyTempClass)
 	//{
 	//	AActor* SpawnActor = GetWorld()->SpawnActor<AActor>(MyTempClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	//}
 	// 
-	//ÖØµþ´úÀí°ó¶¨
+	//ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	MyBox->OnComponentBeginOverlap.AddDynamic(this, &AInteractiveActor::BeginOverlapFunction);
 	MyBox->OnComponentEndOverlap.AddDynamic(this, &AInteractiveActor::EndOverlapFunction);
-	//hit´úÀí°ó¶¨
+	//hitï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	MyBox->OnComponentHit.AddDynamic(this, &AInteractiveActor::HitFunction);
 
-	//ÉèÖÃbox´óÐ¡
+	//ï¿½ï¿½ï¿½ï¿½boxï¿½ï¿½Ð¡
 	MyBox->SetBoxExtent(FVector(64, 64, 64));
 }
 
@@ -82,7 +82,7 @@ void AInteractiveActor::BeginPlay()
 void AInteractiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//ÒÆ¶¯£ºLocalÏà¶Ô×ÔÉí£¬WorldÏà¶ÔÊÀ½ç
+	//ï¿½Æ¶ï¿½ï¿½ï¿½Localï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Worldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	FVector MyOffset = FVector(1, 0, 0);
 	FHitResult HitResult;
 	AddActorLocalOffset(MyOffset, false, &HitResult);
