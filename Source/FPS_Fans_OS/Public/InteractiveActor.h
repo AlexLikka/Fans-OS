@@ -48,4 +48,11 @@ public:
 	void EndOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	UFUNCTION()
 	void HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	UFUNCTION()
+	void MoveFunction();
+	// 反向移动函数
+	void ReverseMoveDirection();
+private:
+	FTimerHandle MoveTimerHandle; // 定时器句柄
+	FVector MoveDirection;        // 移动方向
 };

@@ -8,6 +8,9 @@ AInteractiveActor::AInteractiveActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	MoveDirection = FVector(1, 0, 0);
+
 	MyScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyCustomScene"));
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyCustomStaticMesh"));
 	MyParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MyCustomParticleSystem"));
@@ -76,16 +79,15 @@ void AInteractiveActor::BeginPlay()
 
 	//设置box大小
 	MyBox->SetBoxExtent(FVector(64, 64, 64));
+
+	GetWorldTimerManager().SetTimer(MoveTimerHandle, this, &AInteractiveActor::ReverseMoveDirection, 3.0f, true);
 }
 
 // Called every frame
 void AInteractiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//移动：Local相对自身，World相对世界
-	FVector MyOffset = FVector(1, 0, 0);
-	FHitResult HitResult;
-	AddActorLocalOffset(MyOffset, false, &HitResult);
+	MoveFunction();
 }
 
 void AInteractiveActor::BeginOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -103,5 +105,20 @@ void AInteractiveActor::EndOverlapFunction(UPrimitiveComponent* OverlappedCompon
 void AInteractiveActor::HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Red, TEXT("Hit"));
+}
+
+void AInteractiveActor::MoveFunction()
+{
+	//移动：Local相对自身，World相对世界
+	FHitResult HitResult;
+	AddActorLocalOffset(MoveDirection, false, &HitResult);
+}
+
+void AInteractiveActor::ReverseMoveDirection()
+{
+	MoveDirection *= -1;
+
+	//// 打印当前移动方向（用于调试）
+	//UE_LOG(LogTemp, Warning, TEXT("Move Direction Reversed: %s"), *MoveDirection.ToString());
 }
 
