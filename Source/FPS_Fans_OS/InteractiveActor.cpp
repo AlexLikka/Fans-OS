@@ -1,4 +1,4 @@
-ï»¿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "InteractiveActor.h"
@@ -8,35 +8,38 @@ AInteractiveActor::AInteractiveActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	MoveDirection = FVector(1, 0, 0);
+
 	MyScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyCustomScene"));
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyCustomStaticMesh"));
 	MyParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MyCustomParticleSystem"));
 	MyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("MyCustomBox"));
 	MyAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("MyCustomAudio"));
 
-	//ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½
+	//¸¸×Ó¼¶¹ØÏµÉèÖÃ
 	RootComponent = MyScene;
 	MyMesh->SetupAttachment(MyScene);
 	MyParticle->SetupAttachment(MyScene);
 	MyBox->SetupAttachment(MyScene);
 	MyAudio->SetupAttachment(MyBox);
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Îªï¿½ï¿½Ì¬ï¿½Í¾ï¿½Ì¬
-	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½Ø·ï¿½Îªï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Í¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ğ´ï¿½Ú¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½)
-	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½
+	//¼ÓÔØ×ÊÔ´·ÖÎª¶¯Ì¬ºÍ¾²Ì¬
+	//¾²Ì¬¼ÓÔØ·ÖÎª¾²Ì¬¼ÓÔØ×ÊÔ´ºÍ¾²Ì¬¼ÓÔØ×ÊÔ´Àà(±ØĞëĞ´ÔÚ¹¹Ôìº¯ÊıÄÚ)
+	//¾²Ì¬¼ÓÔØ×ÊÔ´£º
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>TempStaticMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
-	MyMesh->SetStaticMesh(TempStaticMesh.Object); //ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
+	MyMesh->SetStaticMesh(TempStaticMesh.Object); //ÉèÖÃÄ£ĞÍ
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>TempParticleSystem(TEXT("/Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
-	MyParticle->SetTemplate(TempParticleSystem.Object); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§
+	MyParticle->SetTemplate(TempParticleSystem.Object); //ÉèÖÃÁ£×ÓÌØĞ§
 	static ConstructorHelpers::FObjectFinder<USoundWave>TempSoundWave(TEXT("/Script/Engine.SoundWave'/Game/StarterContent/Audio/Collapse01.Collapse01'"));
 	MyAudio->SetSound(TempSoundWave.Object);
 
-	//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½à£º
+	//¾²Ì¬¼ÓÔØ×ÊÔ´Àà£º
 	static ConstructorHelpers::FClassFinder<AActor>TempMyActor(TEXT("/Script/Engine.Blueprint'/Game/StarterContent/Blueprints/Blueprint_CeilingLight.Blueprint_CeilingLight_C'"));
 	InteractiveActor = TempMyActor.Class;
 
 
-	//ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½
+	//Åö×²ÉèÖÃ
 	MyBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	MyBox->SetCollisionObjectType(ECC_WorldDynamic);
 	MyBox->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -55,37 +58,36 @@ void AInteractiveActor::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("MyActorCreated!"));
 	}
 
-	////ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Load
+	////¶¯Ì¬¼ÓÔØ×ÊÔ´£ºLoad
 	//UStaticMesh* MyTempStaticMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
 	//if (MyTempStaticMesh)
 	//{
 	//	MyMesh->SetStaticMesh(MyTempStaticMesh);
 	//}
-	////ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	////¶¯Ì¬¼ÓÔØÀà
 	//UClass* MyTempClass = LoadClass<AActor>(this, TEXT("/Script/Engine.Blueprint'/Game/StarterContent/Blueprints/Blueprint_Effect_Steam.Blueprint_Effect_Steam_C'"));
 	//if (MyTempClass)
 	//{
 	//	AActor* SpawnActor = GetWorld()->SpawnActor<AActor>(MyTempClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	//}
 	// 
-	//ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//ÖØµş´úÀí°ó¶¨
 	MyBox->OnComponentBeginOverlap.AddDynamic(this, &AInteractiveActor::BeginOverlapFunction);
 	MyBox->OnComponentEndOverlap.AddDynamic(this, &AInteractiveActor::EndOverlapFunction);
-	//hitï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//hit´úÀí°ó¶¨
 	MyBox->OnComponentHit.AddDynamic(this, &AInteractiveActor::HitFunction);
 
-	//ï¿½ï¿½ï¿½ï¿½boxï¿½ï¿½Ğ¡
+	//ÉèÖÃbox´óĞ¡
 	MyBox->SetBoxExtent(FVector(64, 64, 64));
+
+	GetWorldTimerManager().SetTimer(MoveTimerHandle, this, &AInteractiveActor::ReverseMoveDirection, 3.0f, true);
 }
 
 // Called every frame
 void AInteractiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//ï¿½Æ¶ï¿½ï¿½ï¿½Localï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Worldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	FVector MyOffset = FVector(1, 0, 0);
-	FHitResult HitResult;
-	AddActorLocalOffset(MyOffset, false, &HitResult);
+	MoveFunction();
 }
 
 void AInteractiveActor::BeginOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -103,5 +105,20 @@ void AInteractiveActor::EndOverlapFunction(UPrimitiveComponent* OverlappedCompon
 void AInteractiveActor::HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Red, TEXT("Hit"));
+}
+
+void AInteractiveActor::MoveFunction()
+{
+	//ÒÆ¶¯£ºLocalÏà¶Ô×ÔÉí£¬WorldÏà¶ÔÊÀ½ç
+	FHitResult HitResult;
+	AddActorLocalOffset(MoveDirection, false, &HitResult);
+}
+
+void AInteractiveActor::ReverseMoveDirection()
+{
+	MoveDirection *= -1;
+
+	//// ´òÓ¡µ±Ç°ÒÆ¶¯·½Ïò£¨ÓÃÓÚµ÷ÊÔ£©
+	//UE_LOG(LogTemp, Warning, TEXT("Move Direction Reversed: %s"), *MoveDirection.ToString());
 }
 
