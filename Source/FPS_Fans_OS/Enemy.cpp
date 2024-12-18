@@ -44,6 +44,9 @@ void AEnemy::Dead()
 	// 生成掉落物
 	SpawnDropItems();
 
+	// 给予玩家经验
+	UpdatePlayerExp();
+
 	// 触发死亡动画或其他逻辑
 	TriggerDeathAnimation();
 
@@ -103,5 +106,14 @@ void AEnemy::UpdateKillingEnemyTask()
 	{
 		FString TaskName = FString::Printf(TEXT("Kill %s"), *Name.ToString());
 		Character->TaskList->UpdateTask(TaskName, 1);
+	}
+}
+
+void AEnemy::UpdatePlayerExp()
+{
+	AFPS_Fans_OSCharacter* Character = Cast<AFPS_Fans_OSCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (Character)
+	{
+		Character->CurrentExp += Exp;
 	}
 }

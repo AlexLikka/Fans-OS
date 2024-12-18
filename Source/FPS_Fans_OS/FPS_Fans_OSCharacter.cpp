@@ -128,30 +128,46 @@ void AFPS_Fans_OSCharacter::Tick(float DeltaTime)
 	if (IsSpring)
 	{
 		// 体力消耗
-		Stamina -= DeltaTime * 10.0f;  // 体力消耗速度，随你需求调整
-		if (Stamina < 0.0f)
+		CurrentStamina -= DeltaTime * 10.0f;  // 体力消耗速度，随你需求调整
+		if (CurrentStamina < 0.0f)
 		{
-			Stamina = 0.0f;  // 防止体力变成负数
+			CurrentStamina = 0.0f;  // 防止体力变成负数
 		}
 	}
 	else
 	{
 		// 体力恢复
-		Stamina += DeltaTime * 10.0f;  // 体力恢复速度
-		if (Stamina > 100.0f)
+		CurrentStamina += DeltaTime * 10.0f;  // 体力恢复速度
+		if (CurrentStamina >= MaxStamina)
 		{
-			Stamina = 100.0f;  // 防止体力超过最大值
+			CurrentStamina = MaxStamina;  // 防止体力超过最大值
 		}
 	}
 
 	// 如果体力耗尽，无法疾跑
-	if (Stamina <= 0.0f)
+	if (CurrentStamina <= 0.0f)
 	{
 		IsSpring = false;  // 取消疾跑
 		CanSpring = false;  // 禁止疾跑
 	}
-	if (Stamina >= 100.0f)
+	if (CurrentStamina >= 100.0f)
 	{
 		CanSpring = true;
 	}
+
+	if (CurrentExp >= NextLevelRequireExp)
+	{
+		LevelUp();
+	}
+}
+
+void AFPS_Fans_OSCharacter::LevelUp()
+{
+	CurrentLevel++;
+	CurrentExp -= NextLevelRequireExp;
+	NextLevelRequireExp = 100*CurrentLevel;
+	MaxHealth += 10;
+	CurrentHealth += 10;
+	MaxStamina += 1;
+	CurrentStamina+= 1;
 }
