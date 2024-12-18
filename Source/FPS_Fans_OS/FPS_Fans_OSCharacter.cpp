@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "TaskComponent.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -43,6 +44,7 @@ void AFPS_Fans_OSCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	// 初始化背包类
 	if (BackpackClass)
 	{
 		// 实例化背包类
@@ -53,6 +55,18 @@ void AFPS_Fans_OSCharacter::BeginPlay()
 			Backpack->BackpackUIClass = BackpackUI;
 		}
 	}
+	// 初始化任务列表类
+	if (TaskListClass)
+	{
+		// 实例化任务列表
+		TaskList = NewObject<UTaskComponent>(this, TaskListClass);
+		if (TaskList)
+		{
+			// ...
+			TaskList->AddTask("Kill enemy1", 2, "Nothing");  // 随便添加一个任务，用作测试
+		}
+	}
+	
 }
 
 //////////////////////////////////////////////////////////////////////////// Input

@@ -24,6 +24,10 @@ public:
 	// 生命值，编辑时可修改
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float Health = 100;
+	
+	// 敌人的名字
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	FName Name = "enemy";  
 
 	// 骨骼网格体组件，编辑时可指定骨骼网格体
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
@@ -50,6 +54,9 @@ public:
 
 	// 触发死亡动画或其他逻辑
 	void TriggerDeathAnimation();
+
+	// 更新角色的杀敌任务
+	void UpdateKillingEnemyTask();
 	
 private:
 	bool IsDead();

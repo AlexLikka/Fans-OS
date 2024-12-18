@@ -9,6 +9,7 @@
 #include "Logging/LogMacros.h"
 #include "FPS_Fans_OSCharacter.generated.h"
 
+class UTaskComponent;
 class ACurrentWeapon;
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -114,6 +115,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AmmoInfo")
 	int TotalAmmo = 180; // 人物目前持有的剩余子弹量
+
+	// 任务列表
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="TaskList")
+	TSubclassOf<UTaskComponent> TaskListClass; // 绑定的任务列表C++类
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="TaskList")
+	UTaskComponent* TaskList; // TaskList指针
 private:
 };
 
