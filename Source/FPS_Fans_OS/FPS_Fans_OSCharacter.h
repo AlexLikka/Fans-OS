@@ -76,9 +76,13 @@ public:
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
-	int Health = 100;  // 生命值
+	int CurrentHealth = 100;  // 当前生命值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
-	float Stamina = 100; // 体力值
+	int MaxHealth = 100;  // 当前生命值
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
+	float CurrentStamina = 100; // 体力值
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerBasicInformation")
+	float MaxStamina = 100; // 体力值
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerActionStatus")
 	bool IsSpring = false;  // 现在是否在疾跑
@@ -121,6 +125,16 @@ public:
 	TSubclassOf<UTaskComponent> TaskListClass; // 绑定的任务列表C++类
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="TaskList")
 	UTaskComponent* TaskList; // TaskList指针
+
+	// 角色升级系统
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EXP")
+	int CurrentLevel = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EXP")
+	int32 CurrentExp = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EXP")
+	int64 NextLevelRequireExp = 100;
+	
 private:
+	void LevelUp();
 };
 

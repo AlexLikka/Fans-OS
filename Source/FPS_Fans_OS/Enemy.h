@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	TArray<TSubclassOf<AActor>> DropItemBlueprintClasses;
 
+	// 敌人死亡时玩家获得的经验
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	int Exp = 10;
+
 	// 敌人死亡时调用的方法
 	UFUNCTION(BlueprintCallable, Category = "Enemy")
 	void Dead();
@@ -57,6 +61,9 @@ public:
 
 	// 更新角色的杀敌任务
 	void UpdateKillingEnemyTask();
+
+	// 给予玩家经验
+	void UpdatePlayerExp();
 	
 private:
 	bool IsDead();
