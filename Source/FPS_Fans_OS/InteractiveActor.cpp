@@ -80,6 +80,7 @@ void AInteractiveActor::BeginPlay()
 	//ÉèÖÃbox´óÐ¡
 	MyBox->SetBoxExtent(FVector(64, 64, 64));
 
+	
 	GetWorldTimerManager().SetTimer(MoveTimerHandle, this, &AInteractiveActor::ReverseMoveDirection, 3.0f, true);
 }
 

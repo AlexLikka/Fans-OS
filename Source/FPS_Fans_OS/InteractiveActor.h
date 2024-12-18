@@ -1,4 +1,4 @@
-ï»¿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -13,7 +13,7 @@
 #include "InteractiveActor.generated.h"
 
 UCLASS()
-class FPS_FANS_OS_API AInteractiveActor : public AActor
+class MAP_API AInteractiveActor : public AActor
 {
 	GENERATED_BODY()
 	
@@ -43,16 +43,15 @@ public:
 	TSubclassOf<AActor>InteractiveActor;
 
 	UFUNCTION()
-	void BeginOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void BeginOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
-	void EndOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	virtual void EndOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	UFUNCTION()
-	void HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	virtual void HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	UFUNCTION()
-	void MoveFunction();
-	// ·´ÏòÒÆ¶¯º¯Êý
-	void ReverseMoveDirection();
-private:
+	virtual void MoveFunction();
+	// ¸Ä±äÒÆ¶¯·½Ïòº¯Êý
+	virtual void ReverseMoveDirection();
 	FTimerHandle MoveTimerHandle; // ¶¨Ê±Æ÷¾ä±ú
 	FVector MoveDirection;        // ÒÆ¶¯·½Ïò
 };
