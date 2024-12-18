@@ -2,6 +2,8 @@
 
 
 #include "Enemy.h"
+#include "FPS_Fans_OSCharacter.h"
+#include "TaskComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -36,6 +38,9 @@ void AEnemy::Tick(float DeltaTime)
 // 当敌人死亡时调用的函数
 void AEnemy::Dead()
 {
+	// 尝试更新击杀任务
+	UpdateKillingEnemyTask();
+	
 	// 生成掉落物
 	SpawnDropItems();
 
@@ -89,4 +94,14 @@ void AEnemy::TriggerDeathAnimation()
 {
 	// 在这里可以添加死亡动画的代码，或者其他死亡逻辑
 	// 比如播放死亡动画、掉落物等
+}
+
+void AEnemy::UpdateKillingEnemyTask()
+{
+	AFPS_Fans_OSCharacter* Character = Cast<AFPS_Fans_OSCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (Character)
+	{
+		FString TaskName = FString::Printf(TEXT("Kill %s"), *Name.ToString());
+		Character->TaskList->UpdateTask(TaskName, 1);
+	}
 }

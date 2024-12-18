@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -13,7 +13,7 @@
 #include "InteractiveActor.generated.h"
 
 UCLASS()
-class MAP_API AInteractiveActor : public AActor
+class FPS_FANS_OS_API AInteractiveActor : public AActor
 {
 	GENERATED_BODY()
 	
