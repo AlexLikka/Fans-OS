@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class MAP_API UDialogueWidget : public UUserWidget
+class FPS_FANS_OS_API UDialogueWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:

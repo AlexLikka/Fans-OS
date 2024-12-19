@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "Backpack.h"
 #include "WeaponActor.h"
+#include "SkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "FPS_Fans_OSCharacter.generated.h"
 
+class USkillComponent;
 class UTaskComponent;
 class ACurrentWeapon;
 class UInputComponent;
@@ -110,6 +112,8 @@ public:
 	// 手持物品组件
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CurrentWeapon")
 	ACurrentWeapon* CurrentWeapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CurrentWeapon")
+	ACurrentWeapon* CurrentSecondaryWeapon;
 
 	// 快捷切换装备槽
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapons")
@@ -125,6 +129,12 @@ public:
 	TSubclassOf<UTaskComponent> TaskListClass; // 绑定的任务列表C++类
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="TaskList")
 	UTaskComponent* TaskList; // TaskList指针
+
+	// 角色技能组件
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Skills")
+	TSubclassOf<USkillComponent> SkillClass; // 绑定的技能组件C++类
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Skills")
+	USkillComponent* SkillComponent;  // Skill组件指针
 
 	// 角色升级系统
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EXP")

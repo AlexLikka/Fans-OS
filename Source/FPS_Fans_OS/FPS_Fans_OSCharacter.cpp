@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "SkillComponent.h"
 #include "TaskComponent.h"
 #include "Engine/LocalPlayer.h"
 
@@ -52,6 +53,7 @@ void AFPS_Fans_OSCharacter::BeginPlay()
 		if (Backpack)
 		{
 			// 将 APlayer 的 BackpackUI 绑定到 Backpack 组件的 BackpackUIClass
+			Backpack->RegisterComponent();
 			Backpack->BackpackUIClass = BackpackUI;
 		}
 	}
@@ -63,10 +65,22 @@ void AFPS_Fans_OSCharacter::BeginPlay()
 		if (TaskList)
 		{
 			// ...
+			TaskList->RegisterComponent();
 			TaskList->AddTask("Kill enemy1", 2, "Nothing");  // 随便添加一个任务，用作测试
 		}
 	}
-	
+	// 初始化角色技能组件类
+	if (SkillClass)
+	{
+		// 实例化技能组件
+		SkillComponent = NewObject<USkillComponent>(this, SkillClass);
+		if (SkillComponent)
+		{
+			// ...
+			// 将组件注册到角色的组件系统中
+			SkillComponent->RegisterComponent();
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////// Input

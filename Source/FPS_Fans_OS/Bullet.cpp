@@ -55,6 +55,13 @@ void ABullet::Tick(float DeltaTime)
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 					UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	// 检查指针是否有效
+	if (!HitComp || !OtherActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OnHit: Invalid HitComp or OtherActor"));
+		return; // 提前返回，避免使用无效指针
+	}
+	
 	if (OtherActor && OtherActor != this)
 	{
 		// 尝试将命中的 Actor 转换为 AEnemy
@@ -64,15 +71,19 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 			// 如果命中的是 AEnemy，则调用其自定义的 ApplyDamage 函数
 			UE_LOG(LogTemp, Log, TEXT("Bullet hit Enemy: %s"), *Enemy->GetName());
 			Enemy->ApplyDamage(DamageAmount);
+			Destroy();
+			return;
 		}
-		else
+		// 尝试将命中的Actor转化为ABullet
+		ABullet* Bullet = Cast<ABullet>(OtherActor);
+		if (Bullet)
 		{
-			// 如果不是 AEnemy，则使用泛型的 ApplyDamage
-			UE_LOG(LogTemp, Log, TEXT("Bullet hit OtherActor: %s"), *OtherActor->GetName());
-			// UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, GetInstigatorController(), this, UDamageType::StaticClass());
+			UE_LOG(LogTemp, Log, TEXT("Bullet hit Other Bullet: %s"), *Enemy->GetName());
+			return;
 		}
+		// 如果不是上述类，则使用泛型的 ApplyDamage
+		UE_LOG(LogTemp, Log, TEXT("Bullet hit OtherActor: %s"), *OtherActor->GetName());
+		// UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, GetInstigatorController(), this, UDamageType::StaticClass());
+		Destroy();
 	}
-
-	// 销毁子弹
-	Destroy();
 }

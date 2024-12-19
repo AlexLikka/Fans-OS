@@ -15,14 +15,14 @@ AEnemy::AEnemy()
 
 void AEnemy::ApplyDamage(float DamageAmount)
 {
-	Health -= DamageAmount;
+	CurrentHealth -= DamageAmount;
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CurrentHealth = MaxHealth;
 }
 
 // Called every frame
@@ -57,7 +57,7 @@ void AEnemy::Dead()
 
 bool AEnemy::IsDead()
 {
-	return Health <= 0;
+	return CurrentHealth <= 0;
 }
 
 // 生成掉落物的方法

@@ -22,8 +22,10 @@ public:
 	void ApplyDamage(float DamageAmount);
 
 	// 生命值，编辑时可修改
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+	float CurrentHealth = 100;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	float Health = 100;
+	float MaxHealth = 100;
 	
 	// 敌人的名字
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
