@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "DialogueWidget.generated.h"
 
 /**
@@ -14,6 +15,7 @@ class MAP_API UDialogueWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+    virtual void NativeConstruct() override;
     // 初始化函数，接受文本数组
     UFUNCTION(BlueprintCallable, Category = "Dialogue")
     void InitializeDialogue(const TArray<FText>& InDialogueTexts);
@@ -29,6 +31,9 @@ public:
     // 跳转到下一条文本
     UFUNCTION(BlueprintCallable, Category = "Dialogue")
     void OnNextText();
+
+protected:
+    virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 private:
     // 文本数组

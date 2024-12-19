@@ -3,6 +3,12 @@
 
 #include "DialogueWidget.h"
 
+void UDialogueWidget::NativeConstruct()
+{
+    Super::NativeConstruct();
+    CurrentIndex = 0;
+}
+
 void UDialogueWidget::InitializeDialogue(const TArray<FText>& InDialogueTexts)
 {
     DialogueTexts = InDialogueTexts;
@@ -35,9 +41,51 @@ void UDialogueWidget::OnNextText()
 
 void UDialogueWidget::UpdateText()
 {
-    /*UTextBlock* TextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("DialogueText")));
-    if (TextBlock && DialogueTexts.IsValidIndex(CurrentIndex))
+    if (!IsInViewport())
     {
-        TextBlock->SetText(DialogueTexts[CurrentIndex]);
-    }*/
+        UE_LOG(LogTemp, Warning, TEXT("Widget is not added to the viewport."));
+        return;
+    }
+
+    UTextBlock* TextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("DialogueText")));
+    if (TextBlock)
+    {
+        if (DialogueTexts.IsValidIndex(CurrentIndex))
+        {
+            TextBlock->SetText(DialogueTexts[CurrentIndex]);
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("DialogueText widget not found or is not a TextBlock!"));
+    }
+}
+
+FReply UDialogueWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+    if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton) // 检测左键点击
+    {
+        // 切换到下一条文本
+        if (CurrentIndex + 1 < DialogueTexts.Num())
+        {
+            CurrentIndex++;
+            UpdateText();
+        }
+        else
+        {
+            // 对话结束，隐藏对话框
+            HiddenOnScreen();
+
+            // 恢复输入模式到游戏
+            APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+            if (PlayerController)
+            {
+                FInputModeGameOnly InputMode;
+                PlayerController->SetInputMode(InputMode);
+                PlayerController->bShowMouseCursor = false;
+            }
+        }
+        return FReply::Handled();
+    }
+    return FReply::Unhandled();
 }
