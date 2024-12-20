@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 #include "DialogueWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FPS_FANS_OS_API UDialogueWidget : public UUserWidget
+class MAP_API UDialogueWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
@@ -35,13 +36,29 @@ public:
 protected:
     virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
+    UFUNCTION()
+    void OnAcceptButtonClicked();
+
+    UFUNCTION()
+    void OnRejectButtonClicked();
+
 private:
     // 文本数组
     TArray<FText> DialogueTexts;
+
+    UPROPERTY(meta = (BindWidget))
+    class UButton* AcceptButton;
+
+    UPROPERTY(meta = (BindWidget))
+    class UButton* RejectButton;
 
     // 当前文本索引
     int32 CurrentIndex;
 
     // 更新显示的文本
     void UpdateText();
+
+    UFUNCTION()
+    void UpdateButtonVisibility();
+    
 };

@@ -13,7 +13,7 @@
 #include "InteractiveActor.generated.h"
 
 UCLASS()
-class FPS_FANS_OS_API AInteractiveActor : public AActor
+class MAP_API AInteractiveActor : public AActor
 {
 	GENERATED_BODY()
 	
@@ -50,8 +50,8 @@ public:
 	virtual void HitFunction(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	UFUNCTION()
 	virtual void MoveFunction();
-	// ï¿½Ä±ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ¸Ä±äÒÆ¶¯·½Ïòº¯Êý
 	virtual void ReverseMoveDirection();
-	FTimerHandle MoveTimerHandle; // ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
-	FVector MoveDirection;        // ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	FTimerHandle MoveTimerHandle; // ¶¨Ê±Æ÷¾ä±ú
+	FVector MoveDirection;        // ÒÆ¶¯·½Ïò
 };
