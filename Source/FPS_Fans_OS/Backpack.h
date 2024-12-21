@@ -17,9 +17,19 @@ public:
 	// Sets default values for this component's properties
 	UBackpack();
 
+	// 背包容量
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Backpack")
+	int32 Capacity = 32;
+
+	// 记录物品的TArray，键为物品的GUID，值为物品数量
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Backpack")
+	TArray<AItem*> Items;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	
+	int32 FindItem(const AItem* Item) const noexcept;
 
 public:	
 	// Called every frame
@@ -28,8 +38,18 @@ public:
 	void OpenBackpackUI();  // 打开背包UI
 	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
 	void CloseBackpackUI();  // 关闭~
+	
+	// 尝试将一件物品添加进背包，成功返回true，失败返回false
 	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
-	void AddItemToBackpack(AItem* Item);  // 将一件物品添加进背包
+	bool AddItemToBackpack(AItem* Item);
+
+	// 将一件物品从背包删除
+	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
+	void DeleteItemFromBackpack(const AItem* Item);
+
+	// 将一件物品从背包删除一定数量
+	UFUNCTION(BlueprintCallable, Category = "Backpack Action")
+	void ReduceItemFromBackpack(const AItem* Item);
 	
 
 	// 背包UI的类

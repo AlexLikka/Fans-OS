@@ -89,3 +89,8 @@ void UTaskComponent::FinishTask(const FString& TaskName)
 	UE_LOG(LogTemp, Warning, TEXT("Task '%s' not found in FinishTask"), *TaskName);
 }
 
+TArray<FTask> UTaskComponent::GetTaskList()
+{
+	return TaskList;
+}
+
