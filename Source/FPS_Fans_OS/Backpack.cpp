@@ -26,6 +26,23 @@ void UBackpack::BeginPlay()
 	
 }
 
+int32 UBackpack::FindItem(const AItem* Item) const noexcept
+{
+	if (Item == nullptr)
+	{
+		return -1;
+	}
+	int32 index = 0;
+	while (index < Items.Num())
+	{
+		if (Item->GetGuid() == Items[index]->GetGuid())
+		{
+			return index;
+		}
+	}
+	return -1;
+}
+
 
 // Called every frame
 void UBackpack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -66,7 +83,63 @@ void UBackpack::CloseBackpackUI()
 	}
 }
 
-void UBackpack::AddItemToBackpack(AItem* Item)
+bool UBackpack::AddItemToBackpack(AItem* Item)
 {
+	if (Item == nullptr)
+	{
+		return false;
+	}
+	const int32 index = FindItem(Item);
+	if (Capacity <= Items.Num() && (index < 0 || Item->IsMutex()))
+	{
+		return false; // 背包已满，无法加入新物品，只能合并已有可堆叠物品
+	}
+	if (index < 0)
+	{
+		Items.Add(Item); // 背包里没有，直接加入
+		return true;
+	}
+	AItem* const item = Items[index];
+	if (item->IsMutex())
+	{
+		Items.Add(Item); // 该物品不允许堆叠，直接加入
+		return true;
+	}
+	item->SetNum(item->GetNum() + Item->GetNum());
+	return true;
+}
+
+void UBackpack::DeleteItemFromBackpack(const AItem* const Item)
+{
+	if (Item == nullptr)
+	{
+		return;
+	}
+	const int32 index = FindItem(Item);
+	if (index < 0)
+	{
+		return; // 未找到，直接返回
+	}
+	Items.RemoveAt(index); // 找到则删除
+}
+
+void UBackpack::ReduceItemFromBackpack(const AItem* const Item)
+{
+	if (Item == nullptr)
+	{
+		return;
+	}
+	const int32 index = FindItem(Item);
+	if (index < 0)
+	{
+		return; // 未找到，直接返回
+	}
+	AItem* const item = Items[index];
+	if (Item->GetNum() >= item->GetNum())
+	{
+		Items.RemoveAt(index);
+		return;
+	}
+	item->SetNum(item->GetNum() - Item->GetNum());
 }
 

@@ -143,6 +143,9 @@ public:
 	int32 CurrentExp = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EXP")
 	int64 NextLevelRequireExp = 100;
+
+	// 角色天赋系统
+	
 	
 private:
 	void LevelUp();

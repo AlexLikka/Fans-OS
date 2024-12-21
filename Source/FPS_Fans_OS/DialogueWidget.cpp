@@ -3,6 +3,8 @@
 
 #include "DialogueWidget.h"
 
+#include "FPS_Fans_OSCharacter.h"
+#include "TaskComponent.h"
 void UDialogueWidget::NativeConstruct()
 {
     Super::NativeConstruct();
@@ -143,6 +145,8 @@ void UDialogueWidget::OnAcceptButtonClicked()
     {
         HiddenOnScreen();
     }
+    AFPS_Fans_OSCharacter* Player = Cast<AFPS_Fans_OSCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    Player->TaskList->AddTask("Kill enemy", 2, "Nothing");
 }
 
 void UDialogueWidget::OnRejectButtonClicked()

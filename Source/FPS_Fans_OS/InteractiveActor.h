@@ -13,7 +13,7 @@
 #include "InteractiveActor.generated.h"
 
 UCLASS()
-class MAP_API AInteractiveActor : public AActor
+class FPS_FANS_OS_API AInteractiveActor : public AActor
 {
 	GENERATED_BODY()
 	

@@ -14,6 +14,7 @@ ABullet::ABullet()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 
 	// 创建碰撞组件
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComponent"));
@@ -49,16 +50,16 @@ void ABullet::BeginPlay()
 void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 					UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// 检查指针是否有效
-	if (!HitComp || !OtherActor)
+	if (!HitComp || !OtherActor || !OtherComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnHit: Invalid HitComp or OtherActor"));
+		UE_LOG(LogTemp, Warning, TEXT("OnHit: Invalid HitComp, OtherActor, or OtherComp"));
 		return; // 提前返回，避免使用无效指针
 	}
 	
@@ -84,6 +85,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		// 如果不是上述类，则使用泛型的 ApplyDamage
 		UE_LOG(LogTemp, Log, TEXT("Bullet hit OtherActor: %s"), *OtherActor->GetName());
 		// UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, GetInstigatorController(), this, UDamageType::StaticClass());
-		Destroy();
+		if (this)
+			Destroy();
 	}
 }

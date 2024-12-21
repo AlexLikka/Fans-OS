@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class MAP_API AMissionNPCActor : public ANPCActor
+class FPS_FANS_OS_API AMissionNPCActor : public ANPCActor
 {
 	GENERATED_BODY()
 	

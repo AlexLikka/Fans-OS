@@ -61,4 +61,7 @@ public:
 	// 完成任务方法
 	UFUNCTION(BlueprintCallable, Category = "Task")
 	void FinishTask(const FString& TaskName);
+
+	UFUNCTION(BlueprintCallable, Category = "GetTaskList")
+	TArray<FTask> GetTaskList();
 };

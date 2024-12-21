@@ -9,6 +9,6 @@ public class FPS_Fans_OS : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { "DisplayClusterConfiguration", "DisplayClusterConfiguration" });
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" , "MediaIOCore"});
 	}
 }
