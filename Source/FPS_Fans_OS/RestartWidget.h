@@ -4,33 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
-#include "FPS_Fans_OS/FPS_Fans_OSPlayerController.h"
-#include <Kismet/GameplayStatics.h>
-#include "MainMenuWidget.generated.h"
-
+#include "RestartWidget.generated.h"
 class UButton;
 /**
- *
+ * 
  */
 UCLASS()
-class FPS_FANS_OS_API UMainMenuWidget : public UUserWidget
-
+class NEWPROJECT_API URestartWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
 	virtual void NativeOnInitialized() override;
-	//°üÀ¨¿ªÊ¼ÓÎÏ· ÍË³öÓÎÏ·
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton>StartButton;
+	TObjectPtr<UButton>RestartButton;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton>ExitButton;
 protected:
 	UFUNCTION()
-	void OnStartClicked();
+	void OnRestartClicked();
 	UFUNCTION()
 	void OnExitClicked();
-
 };
-
