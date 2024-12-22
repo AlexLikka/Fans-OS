@@ -9,7 +9,7 @@ AInteractiveActor::AInteractiveActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	MoveDirection = FVector(1, 0, 0);
+	MoveDirection = FVector(3, 0, 0);
 
 	MyScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyCustomScene"));
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyCustomStaticMesh"));
@@ -31,8 +31,8 @@ AInteractiveActor::AInteractiveActor()
 	MyMesh->SetStaticMesh(TempStaticMesh.Object); //设置模型
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>TempParticleSystem(TEXT("/Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
 	MyParticle->SetTemplate(TempParticleSystem.Object); //设置粒子特效
-	static ConstructorHelpers::FObjectFinder<USoundWave>TempSoundWave(TEXT("/Script/Engine.SoundWave'/Game/StarterContent/Audio/Collapse01.Collapse01'"));
-	MyAudio->SetSound(TempSoundWave.Object);
+	// static ConstructorHelpers::FObjectFinder<USoundWave>TempSoundWave(TEXT("/Script/Engine.SoundWave'/Game/StarterContent/Audio/Collapse01.Collapse01'"));
+	// MyAudio->SetSound(TempSoundWave.Object);
 
 	//静态加载资源类：
 	static ConstructorHelpers::FClassFinder<AActor>TempMyActor(TEXT("/Script/Engine.Blueprint'/Game/StarterContent/Blueprints/Blueprint_CeilingLight.Blueprint_CeilingLight_C'"));

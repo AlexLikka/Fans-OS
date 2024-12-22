@@ -50,7 +50,7 @@ void ANPCActor::BeginOverlapFunction(UPrimitiveComponent* OverlappedComponent, A
 
 void ANPCActor::EndOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	MoveDirection = FVector(1.0f, 0.0f, 0.0f);
+	MoveDirection = FVector(3.0f, 0.0f, 0.0f);
 	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Yellow, TEXT("NPC: Bye!!"));
 	HideDialogue();
 }
