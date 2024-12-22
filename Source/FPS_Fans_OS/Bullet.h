@@ -10,8 +10,8 @@ UCLASS()
 class FPS_FANS_OS_API ABullet : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ABullet();
 
@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -39,8 +39,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 	float DamageAmount;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target")
+	AActor* TargetActor;  // 目标Actor
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void SetTarget(AActor* Target);  // 设置目标
+
+
 	// 碰撞时的处理
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-			   UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	int num = 1;
 };

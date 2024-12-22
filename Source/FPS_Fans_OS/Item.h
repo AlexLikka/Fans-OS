@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class FPS_FANS_OS_API AItem : public AActor
 {
 	GENERATED_BODY()
@@ -46,7 +46,7 @@ public:
 	bool isUnique;
 
 	
-
+	AItem* Clone() const noexcept; // 克隆
 	int32 GetGuid() const noexcept; // 获取物品的Guid
 	bool IsMutex() const noexcept; // 获取物品是否互斥
 	int32 GetNum() const noexcept; // 获取物品数量

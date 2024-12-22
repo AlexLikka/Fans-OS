@@ -20,6 +20,15 @@ AItem::AItem(UTexture2D* const icon, const int32 guid, const int32 num, const bo
 	isUnique = mutex;
 }
 
+AItem* AItem::Clone() const noexcept
+{
+	AItem* p = NewObject<AItem>();
+	p->ItemGuid = ItemGuid;
+	p->ItemIcon = ItemIcon;
+	p->ItemNum = ItemNum;
+	return p;
+}
+
 int32 AItem::GetGuid() const noexcept
 {
 	return ItemGuid;

@@ -3,82 +3,109 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "DropItem.h"  // å¼•å…¥DropItemç±»
+#include "GameFramework/Character.h"
+#include "DropItem.h" 
 #include "WeaponActor.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Enemy.generated.h"
+#include "FPS_Fans_OSCharacter.h"
+#include "WeaponActor.h"
+#include "MyCharacter.generated.h"
 
-class AWeaponActor;
+class ACurrentWeapon;
 
 UCLASS()
-class FPS_FANS_OS_API AEnemy : public AActor
+class FPS_FANS_OS_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AEnemy();
-
+	// Sets default values for this character's properties
+	AMyCharacter();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* EnemyMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
 
 
+	/// 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	class UStaticMeshComponent* WeaponSocketMesh;
 
-	/** è‡ªå®šä¹‰ä¼¤å®³å¤„ç†å‡½æ•° */
+
+
+	///
+
+
+	/** ×Ô¶¨ÒåÉËº¦´¦Àíº¯Êı */
 	UFUNCTION(BlueprintCallable, Category = "Damage")
 	void ApplyDamage(float DamageAmount);
 
-	// ç”Ÿå‘½å€¼ï¼Œç¼–è¾‘æ—¶å¯ä¿®æ”¹
+	// ÉúÃüÖµ£¬±à¼­Ê±¿ÉĞŞ¸Ä
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
 	float CurrentHealth = 100;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float MaxHealth = 100;
 
-	// æ•Œäººçš„åå­—
+	// µĞÈËµÄÃû×Ö
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	FName Name = "enemy";
 
-	// éª¨éª¼ç½‘æ ¼ä½“ç»„ä»¶ï¼Œç¼–è¾‘æ—¶å¯æŒ‡å®šéª¨éª¼ç½‘æ ¼ä½“
+	// ¹Ç÷ÀÍø¸ñÌå×é¼ş£¬±à¼­Ê±¿ÉÖ¸¶¨¹Ç÷ÀÍø¸ñÌå
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	USkeletalMeshComponent* SkeletalMeshComponent;
 
-	// æšä¸¾æ‰è½ç‰©çš„é™æ€ç½‘æ ¼ä½“ç±»å‹
+	// Ã¶¾ÙµôÂäÎïµÄ¾²Ì¬Íø¸ñÌåÀàĞÍ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	TArray<TSubclassOf<AActor>> DropItemBlueprintClasses;
 
-	// æ•Œäººæ­»äº¡æ—¶ç©å®¶è·å¾—çš„ç»éªŒ
+	// µĞÈËËÀÍöÊ±Íæ¼Ò»ñµÃµÄ¾­Ñé
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	int Exp = 10;
 
-	// æ•Œäººæ­»äº¡æ—¶è°ƒç”¨çš„æ–¹æ³•
+
+	// µĞÈËËÀÍöÊ±µ÷ÓÃµÄ·½·¨
 	UFUNCTION(BlueprintCallable, Category = "Enemy")
-
-
 	void Dead();
+	void Fire();
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
+
+
 	virtual void Tick(float DeltaTime) override;
 
-	// æ‰è½ç‰©ç”Ÿæˆçš„å‡½æ•°
+	// µôÂäÎïÉú³ÉµÄº¯Êı
 	void SpawnDropItems();
 
-	// è§¦å‘æ­»äº¡åŠ¨ç”»æˆ–å…¶ä»–é€»è¾‘
+	// ´¥·¢ËÀÍö¶¯»­»òÆäËûÂß¼­
 	void TriggerDeathAnimation();
 
-	// æ›´æ–°è§’è‰²çš„æ€æ•Œä»»åŠ¡
+	// ¸üĞÂ½ÇÉ«µÄÉ±µĞÈÎÎñ
 	void UpdateKillingEnemyTask();
 
-	// ç»™äºˆç©å®¶ç»éªŒ
+	// ¸øÓèÍæ¼Ò¾­Ñé
 	void UpdatePlayerExp();
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<ABullet> BulletClass;  // ×Óµ¯Àà
+
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+	void FireAtPlayer(AFPS_Fans_OSCharacter* TargetPlayer);  // ¶ÔÍæ¼Ò¿ª»ğ
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	USoundBase* FireSound;
+
 
 private:
 	bool IsDead();
+
+
 };
+	
