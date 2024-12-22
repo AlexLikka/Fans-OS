@@ -5,32 +5,30 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
-#include "FPS_Fans_OS/FPS_Fans_OSPlayerController.h"
+#include "FPS_Fans_OS\FPS_Fans_OSPlayerController.h"
 #include <Kismet/GameplayStatics.h>
-#include "MainMenuWidget.generated.h"
+#include "QuitMenuWidget.generated.h"
 
 class UButton;
 /**
- *
+ * 
  */
 UCLASS()
-class FPS_FANS_OS_API UMainMenuWidget : public UUserWidget
-
+class FPS_FANS_OS_API UQuitMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
 	virtual void NativeOnInitialized() override;
-	//掳眉脌篓驴陋脢录脫脦脧路 脥脣鲁枚脫脦脧路
+	//包括继续游戏 退出游戏
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton>StartButton;
+	TObjectPtr<UButton>ContinueButton;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton>ExitButton;
 protected:
 	UFUNCTION()
-	void OnStartClicked();
+	void OnContinueClicked();
 	UFUNCTION()
 	void OnExitClicked();
 
 };
-

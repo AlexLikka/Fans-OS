@@ -1,14 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HUD/MainMenuWidget.h"
-#include "Components/Button.h"
-//#include "Game/MainMenuController.h" //Èç¹ûĞèÒª½«Ö÷²Ëµ¥ÉèÖÃÎªµ¥¶ÀµÄ¿ØÖÆÆ÷
-#include <Game/ThirdPlayerController.h>
-#include <Kismet/GameplayStatics.h>
+#include "MainMenuWidget.h"
+
 void UMainMenuWidget::NativeOnInitialized()
-{	
-	//³õÊ¼»¯
+{
+	//åˆå§‹åŒ–
 	Super::NativeOnInitialized();
 	if (StartButton != nullptr)
 	{
@@ -22,19 +19,18 @@ void UMainMenuWidget::NativeOnInitialized()
 
 void UMainMenuWidget::OnStartClicked()
 {
-	
-	// ´¥·¢ÓÎÏ·¿ªÊ¼
-	AThirdPlayerController* PlayerController = Cast<AThirdPlayerController>(GetOwningPlayer());
+	// è§¦å‘æ¸¸æˆå¼€å§‹
+	AFPS_Fans_OSPlayerController* PlayerController = Cast<AFPS_Fans_OSPlayerController>(GetOwningPlayer());
 	if (PlayerController != nullptr) {
 		//Hide
-		PlayerController->DestoryMainMenuWidget();
-		//ÏÔÊ¾HUD
-		PlayerController->ShowHUD();
+		PlayerController->DestroyMainMenuWidget();
+		////æ˜¾ç¤ºHUD
+		//PlayerController->ShowHUD();
 	}
-	
 }
 
 void UMainMenuWidget::OnExitClicked()
 {
-	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);//ÍË³ö
+	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);//é€€å‡º
 }
+
