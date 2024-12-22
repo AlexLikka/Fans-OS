@@ -4,12 +4,15 @@
 #include "Enemy.h"
 #include "FPS_Fans_OSCharacter.h"
 #include "TaskComponent.h"
+#include "GameFramework/Character.h"
+
 
 // Sets default values
 AEnemy::AEnemy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 
 }
 
@@ -40,7 +43,7 @@ void AEnemy::Dead()
 {
 	// 尝试更新击杀任务
 	UpdateKillingEnemyTask();
-	
+
 	// 生成掉落物
 	SpawnDropItems();
 
@@ -52,7 +55,7 @@ void AEnemy::Dead()
 
 	// 销毁敌人角色
 	Destroy();
-	
+
 }
 
 bool AEnemy::IsDead()

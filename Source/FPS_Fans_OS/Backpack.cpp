@@ -52,60 +52,14 @@ void UBackpack::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// ...
 }
 
-void UBackpack::OpenBackpackUI()
-{
-	// 如果 UI 类已经设置且实例不存在，则加载并显示 UI
-	if (BackpackUIClass && !BackpackUIInstance)
-	{
-		// 获取玩家控制器（或是游戏中的其他 UI 管理对象）
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		if (PlayerController)
-		{
-			// 创建 UI 实例并将其添加到视口
-			BackpackUIInstance = CreateWidget<UUserWidget>(PlayerController, BackpackUIClass);
-			if (BackpackUIInstance)
-			{
-				BackpackUIInstance->AddToViewport();
-			}
-		}
-	}
-}
-
-void UBackpack::CloseBackpackUI()
-{
-	if (BackpackUIInstance)
-	{
-		// 从视口中移除UI
-		BackpackUIInstance->RemoveFromParent();
-
-		// 清除UI实例引用
-		BackpackUIInstance = nullptr;
-	}
-}
-
 bool UBackpack::AddItemToBackpack(AItem* Item)
 {
-	if (Item == nullptr)
+	Item = Item->Clone();
+	if (Item == nullptr || Capacity <= Items.Num())
 	{
 		return false;
 	}
-	const int32 index = FindItem(Item);
-	if (Capacity <= Items.Num() && (index < 0 || Item->IsMutex()))
-	{
-		return false; // 背包已满，无法加入新物品，只能合并已有可堆叠物品
-	}
-	if (index < 0)
-	{
-		Items.Add(Item); // 背包里没有，直接加入
-		return true;
-	}
-	AItem* const item = Items[index];
-	if (item->IsMutex())
-	{
-		Items.Add(Item); // 该物品不允许堆叠，直接加入
-		return true;
-	}
-	item->SetNum(item->GetNum() + Item->GetNum());
+	Items.Add(Item);
 	return true;
 }
 
